@@ -1,11 +1,8 @@
-let mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const DB_URL = "mongodb://localhost:27017/keyme";
 
-mongoose.connect(DB_URL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(DB_URL);
 
 const db = mongoose.connection;
 
@@ -21,4 +18,4 @@ db.on("disconnected", () => {
   console.log(`DisConnected to ${DB_URL}`);
 });
 
-module.exports = mongoose;
+export default mongoose;
