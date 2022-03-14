@@ -2,7 +2,6 @@ import express from "express";
 import { createServer } from "http";
 import path from "path";
 import createError from "http-errors";
-import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import { Server } from "socket.io";
@@ -15,8 +14,8 @@ const io = new Server(server);
 const PORT = process.env.port || 5555;
 
 app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use("/chatApi", chatApi);
@@ -28,7 +27,7 @@ io.on("connection", (socket) => {
   });
 });
 
-app.set("views", path.join(__dirname, "views"));
+// app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
 

@@ -1,11 +1,17 @@
 import { Router } from "express";
-import { findAll } from "../../controller/userController";
+import userController from "../../controller/user";
 const router = Router();
+
+router.post("/login", userController.login);
+
+router.post("/register", userController.register);
+
+router.get("/findAll", userController.findAll);
+
+router.get("/getUserInfo", userController.getUserInfo);
 
 router.get("/", function (req, res, next) {
   res.send("user");
 });
-
-router.get("/findAll", findAll);
 
 export default router;

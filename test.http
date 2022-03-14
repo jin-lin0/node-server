@@ -1,0 +1,4 @@
+@url = http://localhost:5555/chatApi/user
+
+###
+GET {{url}}/findAll
