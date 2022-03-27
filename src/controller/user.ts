@@ -1,6 +1,6 @@
 import User from "../models/user";
 import bcryptjs from "bcryptjs";
-import { asyncHandler } from "../utils";
+import { asyncHandler } from "../util";
 import { errorCode, getErrorJSON } from "../const/errorJSON";
 
 const userController = {
@@ -10,23 +10,26 @@ const userController = {
     if (!user) {
       res.json(getErrorJSON(errorCode.inexistUser));
     }
+    const { nickname } = user;
     if (await bcryptjs.compareSync(password, user.password)) {
-      res.json({ code: 0, msg: "登录成功", data: { phone_number } });
+      res.json({ code: 0, msg: "登录成功", data: { phone_number, nickname } });
     }
     res.json(getErrorJSON(errorCode.passwordWrong));
   }),
 
   register: asyncHandler(async (req, res) => {
-    const { phone_number, password } = req.body;
+    const { phone_number, password, nickname } = req.body;
     const userCheck = await User.findOne({ phone_number });
     if (userCheck) {
       return res.json(getErrorJSON(errorCode.isRegistered));
     }
-    const newUser = await User.create({
+    await User.create({
       phone_number,
+      nickname,
       password: bcryptjs.hashSync(password, 10),
+      type: 1,
     });
-    res.send({ code: 0, msg: "注册成功 ", data: { phone_number } });
+    res.send({ code: 0, msg: "注册成功 ", data: { phone_number, nickname } });
   }),
 
   findAll: (req, res) => {
@@ -40,7 +43,12 @@ const userController = {
       res.send(val);
     });
   },
+
   getUserInfo: (req, res) => {
+    res.send(req.query);
+  },
+
+  getChatList: (req, res) => {
     res.send(req.query);
   },
 };

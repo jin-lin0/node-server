@@ -10,6 +10,7 @@ import chatApi from "./routes/chatApi";
 const app = express();
 const server = createServer(app);
 const io = new Server(server);
+export const onLineUser = {};
 
 const PORT = process.env.port || 5555;
 
@@ -22,6 +23,17 @@ app.use("/chatApi", chatApi);
 
 io.on("connection", (socket) => {
   console.log("new Connection");
+  socket.on("online", (val) => {
+    if (val) {
+      onLineUser[socket.id] = {
+        phone_number: val.phone_number,
+        nickname: val.nickname,
+        loginTime: Date.now(),
+      };
+    }
+    io.emit("onLineUser", onLineUser);
+  });
+
   socket.on("click", (data) => {
     console.log(data);
   });
