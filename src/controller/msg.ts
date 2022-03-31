@@ -1,7 +1,7 @@
 import Msg from "../models/msg";
 import bcryptjs from "bcryptjs";
 import { asyncHandler } from "../util";
-import { errorCode, getErrorJSON } from "../const/errorJSON";
+import { getErrorJSON } from "../const/errorJSON";
 
 const msgController = {
   sendMsg: asyncHandler(async (req, res) => {

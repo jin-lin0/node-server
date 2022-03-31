@@ -8,7 +8,7 @@ router.post("/register", userController.register);
 
 router.get("/findAll", userController.findAll);
 
-router.get("/getUserInfo", userController.getUserInfo);
+router.get("/getInfo", userController.getInfo);
 
 router.get("/", function (req, res, next) {
   res.send("user");

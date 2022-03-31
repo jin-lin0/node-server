@@ -4,12 +4,7 @@ const errorJSON = {
   1003: "登录失败，密码错误！",
   1004: "登录过期，请重新登录!",
   1005: "用户未登录",
-};
-
-export const errorCode = {
-  isRegistered: 1001,
-  inexistUser: 1002,
-  passwordWrong: 1003,
+  1006: "获取用户详情失败！",
 };
 
 export const getErrorJSON = (code: number) => {

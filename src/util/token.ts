@@ -32,3 +32,9 @@ export const verifyToken = asyncHandler((req, res, next) => {
     }
   }
 });
+
+// 不对外暴露该中间件
+export const parseToken = (token) => {
+  const { _id } = jwt.verify(token, TOKEN_SECRET_KEY) as JwtPayload;
+  return _id;
+};

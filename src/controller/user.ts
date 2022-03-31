@@ -1,15 +1,15 @@
 import User from "../models/user";
 import bcryptjs from "bcryptjs";
 import { asyncHandler } from "../util";
-import { errorCode, getErrorJSON } from "../const/errorJSON";
-import { generateToken } from "../util/token";
+import { getErrorJSON } from "../const/errorJSON";
+import { generateToken, parseToken } from "../util/token";
 
 const userController = {
   login: asyncHandler(async (req, res, next) => {
     const { phone_number, password } = req.body;
     const user = await User.findOne({ phone_number });
     if (!user) {
-      return res.json(getErrorJSON(errorCode.inexistUser));
+      return res.json(getErrorJSON(1002));
     }
     if (await bcryptjs.compareSync(password, user.password)) {
       return res.json({
@@ -22,14 +22,14 @@ const userController = {
         },
       });
     }
-    return res.json(getErrorJSON(errorCode.passwordWrong));
+    return res.json(getErrorJSON(1003));
   }),
 
   register: asyncHandler(async (req, res) => {
     const { phone_number, password, nickname } = req.body;
     const userCheck = await User.findOne({ phone_number });
     if (userCheck) {
-      return res.json(getErrorJSON(errorCode.isRegistered));
+      return res.json(getErrorJSON(1001));
     }
     await User.create({
       phone_number,
@@ -56,9 +56,16 @@ const userController = {
     });
   },
 
-  getUserInfo: (req, res) => {
-    return res.send(req.query);
-  },
+  getInfo: asyncHandler(async (req, res) => {
+    const userInfo = await User.findById(
+      parseToken(req.headers.authorization),
+      { __v: 0, _id: 0, password: 0 }
+    );
+    if (!userInfo) {
+      return res.json(getErrorJSON(1006));
+    }
+    return res.json({ code: 0, data: userInfo });
+  }),
 
   getChatList: (req, res) => {
     return res.send(req.query);
