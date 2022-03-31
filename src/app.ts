@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import { Server } from "socket.io";
 import chatApi from "./routes/chatApi";
+import { verifyToken } from "./util/token";
 
 const app = express();
 const server = createServer(app);
@@ -18,11 +19,15 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(verifyToken);
 
 app.use("/chatApi", chatApi);
 
 io.on("connection", (socket) => {
   console.log("new Connection");
+  socket.on("disconnect", (r) => {
+    console.log("disconnect:" + r);
+  });
   socket.on("online", (val) => {
     if (val) {
       onLineUser[socket.id] = {
@@ -34,7 +39,7 @@ io.on("connection", (socket) => {
     io.emit("onLineUser", onLineUser);
   });
 
-  socket.on("click", (data) => {
+  socket.on("sendMsg", (data) => {
     console.log(data);
   });
 });

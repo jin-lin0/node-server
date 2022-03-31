@@ -6,13 +6,11 @@ const UserSchema = new Schema(
   {
     phone_number: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    username: { type: String },
     avatar: { type: String },
-    nickname: { type: String },
-    sex: { type: String },
+    nickname: { type: String, max: 6 },
+    sex: { type: Number, default: 0 }, // 0 未定义 1 男 2 女
     age: { type: Number },
     birth: { type: Date },
-    registerTime: { type: Date, default: Date.now() },
     type: { type: Number, default: 1 }, // 账号类型 0 不可用 / 1 正常使用
   },
   { timestamps: true }
