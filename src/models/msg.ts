@@ -2,18 +2,21 @@ import mongoose from "../db/index";
 
 const { Schema, model } = mongoose;
 
-const MsgSchema = new Schema(
-  {
-    msgId: { type: String, required: true },
-    type: { type: Number, default: 1 }, // 0 过期 1 文本 2 文件
-    from: { type: String, required: true },
-    to: { type: String, required: true },
-    content: { type: String },
-    createTime: { type: Date, default: Date.now() },
-    expand: { type: String },
+const MsgSchema = new Schema({
+  type: { type: String, default: "text" },
+  senderId: {
+    type: Schema.Types.ObjectId,
+    ref: "user",
   },
-  { timestamps: true }
-);
+  receiveId: { type: String },
+  content: { type: String },
+  createTime: { type: Date, default: Date.now() },
+  expand: { type: String },
+});
+
+MsgSchema.statics.findSenderBySenderId = function (userId, cb) {
+  return this.find({ senderId: userId }).populate("senderId").exec(cb);
+};
 
 const Msg = model("msg", MsgSchema);
 

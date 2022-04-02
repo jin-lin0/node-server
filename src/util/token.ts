@@ -14,24 +14,28 @@ const authRoutes = {
 export const generateToken = (_id: string) =>
   jwt.sign({ _id }, TOKEN_SECRET_KEY, { expiresIn: "1h" });
 
-export const verifyToken = asyncHandler((req, res, next) => {
-  const token = req.headers.authorization;
+export const verifyToken = (req, res, next) => {
+  try {
+    const token = req.headers.authorization;
 
-  if (authRoutes.noToken.includes(req.originalUrl)) {
-    next();
-  } else {
-    if (token) {
-      const { _id } = jwt.verify(token, TOKEN_SECRET_KEY) as JwtPayload;
-      if (_id) {
-        next();
-      } else {
-        return res.json(getErrorJSON(1004));
-      }
+    if (authRoutes.noToken.includes(req.originalUrl)) {
+      next();
     } else {
-      return res.json(getErrorJSON(1005));
+      if (token) {
+        const { _id } = jwt.verify(token, TOKEN_SECRET_KEY) as JwtPayload;
+        if (_id) {
+          next();
+        } else {
+          return res.json(getErrorJSON(1004));
+        }
+      } else {
+        return res.json(getErrorJSON(1005));
+      }
     }
+  } catch (e) {
+    return res.json(getErrorJSON(1004));
   }
-});
+};
 
 // 不对外暴露该中间件
 export const parseToken = (token) => {

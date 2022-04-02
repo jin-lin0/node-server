@@ -24,23 +24,21 @@ app.use(verifyToken);
 app.use("/chatApi", chatApi);
 
 io.on("connection", (socket) => {
-  console.log("new Connection");
-  socket.on("disconnect", (r) => {
-    console.log("disconnect:" + r);
-  });
   socket.on("online", (val) => {
     if (val) {
-      onLineUser[socket.id] = {
-        phone_number: val.phone_number,
-        nickname: val.nickname,
-        loginTime: Date.now(),
-      };
+      onLineUser[socket.id] = val;
     }
     io.emit("onLineUser", onLineUser);
   });
 
   socket.on("sendMsg", (data) => {
     console.log(data);
+  });
+
+  socket.on("disconnect", (r) => {
+    const id = socket.id;
+    delete onLineUser[id];
+    io.emit("onLineUser", onLineUser);
   });
 });
 

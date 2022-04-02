@@ -6,7 +6,7 @@ const UserSchema = new Schema(
   {
     phone_number: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    avatar: { type: String },
+    avatarUrl: { type: String },
     nickname: { type: String, max: 6 },
     sex: { type: Number, default: 0 }, // 0 未定义 1 男 2 女
     age: { type: Number },

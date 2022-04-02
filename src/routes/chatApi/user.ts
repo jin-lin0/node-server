@@ -10,6 +10,7 @@ router.get("/findAll", userController.findAll);
 
 router.get("/getInfo", userController.getInfo);
 
+router.get("/findById", userController.findById);
 router.get("/", function (req, res, next) {
   res.send("user");
 });
