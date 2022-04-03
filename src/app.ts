@@ -7,6 +7,7 @@ import cors from "cors";
 import { Server } from "socket.io";
 import chatApi from "./routes/chatApi";
 import { verifyToken } from "./util/token";
+import friendController from "./controller/friend";
 
 const app = express();
 const server = createServer(app);
@@ -29,6 +30,12 @@ io.on("connection", (socket) => {
       onLineUser[socket.id] = val;
     }
     io.emit("onLineUser", onLineUser);
+  });
+
+  socket.on("addFriend", async (val) => {
+    friendController.add(val).then((res) => {
+      io.sockets.to(socket.id).emit("addSuccess", res);
+    });
   });
 
   socket.on("sendMsg", (data) => {

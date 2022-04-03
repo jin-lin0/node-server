@@ -88,10 +88,6 @@ const userController = {
       data: userInfo,
     });
   }),
-
-  getChatList: (req, res) => {
-    return res.send(req.query);
-  },
 };
 
 export default userController;
