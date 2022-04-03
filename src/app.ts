@@ -8,6 +8,7 @@ import { Server } from "socket.io";
 import chatApi from "./routes/chatApi";
 import { verifyToken } from "./util/token";
 import friendController from "./controller/friend";
+import msgController from "./controller/msg";
 
 const app = express();
 const server = createServer(app);
@@ -39,7 +40,15 @@ io.on("connection", (socket) => {
   });
 
   socket.on("sendMsg", (data) => {
-    console.log(data);
+    msgController.add(data).then((res) => {
+      const receiveSocketId = Object.keys(onLineUser).find(
+        (key) => onLineUser[key]._id === data.receive
+      );
+      console.log(receiveSocketId, data);
+      if (receiveSocketId) {
+        socket.to(receiveSocketId).emit("receiveMsg", data);
+      }
+    });
   });
 
   socket.on("disconnect", (r) => {

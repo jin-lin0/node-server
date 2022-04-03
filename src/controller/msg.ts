@@ -4,6 +4,10 @@ import { asyncHandler } from "../util";
 import { getErrorJSON } from "../const/errorJSON";
 
 const msgController = {
+  add: async (msg) => {
+    const data = await Msg.insertMany(msg);
+    return data[0];
+  },
   sendMsg: asyncHandler(async (req, res) => {
     const { from, to, content } = req.body;
     const msg = await Msg.create({
