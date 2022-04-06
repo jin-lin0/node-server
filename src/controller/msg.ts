@@ -5,8 +5,10 @@ import { getErrorJSON } from "../const/errorJSON";
 
 const msgController = {
   add: async (msg) => {
-    const data = await Msg.insertMany(msg);
-    return data[0];
+    if (msg.sender && msg.receive) {
+      const data = await Msg.insertMany(msg);
+      return data[0];
+    }
   },
   sendMsg: asyncHandler(async (req, res) => {
     const { from, to, content } = req.body;

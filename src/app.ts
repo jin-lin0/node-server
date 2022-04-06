@@ -44,7 +44,6 @@ io.on("connection", (socket) => {
       const receiveSocketId = Object.keys(onLineUser).find(
         (key) => onLineUser[key]._id === data.receive
       );
-      console.log(receiveSocketId, data);
       if (receiveSocketId) {
         socket.to(receiveSocketId).emit("receiveMsg", data);
       }
