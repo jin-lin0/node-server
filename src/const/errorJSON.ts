@@ -6,6 +6,7 @@ const errorJSON = {
   1005: "用户未登录",
   1006: "获取用户详情失败！",
   1010: "查询用户失败",
+  1030: "查询信息失败",
 };
 
 export const getErrorJSON = (code: number) => {

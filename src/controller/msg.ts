@@ -20,6 +20,25 @@ const msgController = {
     console.log(req.body);
     res.json({ data: req.body });
   }),
+
+  getPrivate: async (req, res) => {
+    try {
+      const { number, userAId, userBId } = req.query;
+      const data = await Msg.find({
+        $or: [
+          { sender: userAId, receive: userBId },
+          { sender: userBId, receive: userAId },
+        ],
+      });
+      return res.json({
+        code: 0,
+        msg: "查询私聊成功",
+        data,
+      });
+    } catch (e) {
+      res.json(getErrorJSON(1030));
+    }
+  },
 };
 
 export default msgController;
