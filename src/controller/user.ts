@@ -91,7 +91,6 @@ const userController = {
 
   getInfo: asyncHandler(async (req, res) => {
     const { id } = req.query;
-    console.log(id);
     const userInfo = await User.findById(id, { __v: 0, password: 0 });
     if (!userInfo) {
       return res.json(getErrorJSON(1006));

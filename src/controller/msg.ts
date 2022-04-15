@@ -23,17 +23,19 @@ const msgController = {
 
   getPrivate: async (req, res) => {
     try {
-      const { number, userAId, userBId } = req.query;
+      const { number = 30, userAId, userBId } = req.query;
       const data = await Msg.find({
         $or: [
           { sender: userAId, receive: userBId },
           { sender: userBId, receive: userAId },
         ],
-      });
+      })
+        .sort({ _id: -1 })
+        .limit(number);
       return res.json({
         code: 0,
         msg: "查询私聊成功",
-        data,
+        data: data.reverse(),
       });
     } catch (e) {
       res.json(getErrorJSON(1030));

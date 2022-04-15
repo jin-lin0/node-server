@@ -4,6 +4,10 @@ import { getErrorJSON } from "../const/errorJSON";
 
 const friendController = {
   add: async (data) => {
+    const { userBuild, userReceive } = data;
+    if (userBuild === userReceive) {
+      return false;
+    }
     const friend = await Friend.findOne(data);
     if (!friend) {
       Friend.insertMany(data);
