@@ -8,6 +8,8 @@ router.post("/register", userController.register);
 
 router.get("/findAll", userController.findAll);
 
+router.get("/getMyInfo", userController.getMyInfo);
+
 router.get("/getInfo", userController.getInfo);
 
 router.get("/findById", userController.findById);

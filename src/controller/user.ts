@@ -75,11 +75,24 @@ const userController = {
     }
   },
 
-  getInfo: asyncHandler(async (req, res) => {
+  getMyInfo: asyncHandler(async (req, res) => {
     const userInfo = await User.findById(
       parseToken(req.headers.authorization),
       { __v: 0, password: 0 }
     );
+    if (!userInfo) {
+      return res.json(getErrorJSON(1006));
+    }
+    return res.json({
+      code: 0,
+      data: userInfo,
+    });
+  }),
+
+  getInfo: asyncHandler(async (req, res) => {
+    const { id } = req.query;
+    console.log(id);
+    const userInfo = await User.findById(id, { __v: 0, password: 0 });
     if (!userInfo) {
       return res.json(getErrorJSON(1006));
     }
