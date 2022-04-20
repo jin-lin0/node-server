@@ -4,6 +4,7 @@ import { asyncHandler } from "../util";
 import { getErrorJSON } from "../const/errorJSON";
 import { generateToken, parseToken } from "../util/token";
 import { onLineUser } from "../app";
+import Regex from "../util/regex";
 
 const userController = {
   login: asyncHandler(async (req, res, next) => {
@@ -87,6 +88,55 @@ const userController = {
       code: 0,
       data: userInfo,
     });
+  }),
+
+  updateMyInfo: asyncHandler(async (req, res) => {
+    const { nickname, phone_number, sex } = req.body;
+    if (!Regex.phoneNumber.test(phone_number)) {
+      return res.json(getErrorJSON(1041));
+    }
+    if (!Regex.nickname.test(nickname)) {
+      return res.json(getErrorJSON(1042));
+    }
+    const userId = parseToken(req.headers.authorization);
+    const data = await User.findByIdAndUpdate(userId, {
+      nickname,
+      phone_number,
+      sex,
+    });
+    if (data) {
+      return res.json({
+        code: 0,
+        msg: "修改信息成功！",
+        data: {},
+      });
+    }
+  }),
+
+  updateMyPwd: asyncHandler(async (req, res) => {
+    const { current_password, password, confirm_password } = req.body;
+    const userId = parseToken(req.headers.authorization);
+    if (password !== confirm_password) {
+      return res.json(getErrorJSON(1020));
+    }
+    if (!Regex.password.test(password)) {
+      return res.json(getErrorJSON(1040));
+    }
+    const userInfo = await User.findById(userId);
+    if (await bcryptjs.compareSync(current_password, userInfo.password)) {
+      const newPassword = bcryptjs.hashSync(password, 10);
+      const data = await User.findByIdAndUpdate(userId, {
+        $set: {
+          password: newPassword,
+        },
+      });
+      return res.json({
+        code: 0,
+        msg: "修改密码成功",
+        data: {},
+      });
+    }
+    return res.json(getErrorJSON(1021));
   }),
 
   getInfo: asyncHandler(async (req, res) => {

@@ -1,5 +1,4 @@
 import jwt from "jsonwebtoken";
-import { asyncHandler } from ".";
 import { TOKEN_SECRET_KEY } from "../const/config";
 import { getErrorJSON } from "../const/errorJSON";
 
