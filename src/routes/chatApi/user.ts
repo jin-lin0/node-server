@@ -17,6 +17,8 @@ router.post("/updateMyPwd", userController.updateMyPwd);
 router.post("/updateMyInfo", userController.updateMyInfo);
 
 router.get("/findById", userController.findById);
+
+router.get("/findByNickname", userController.findByNickname);
 router.get("/", function (req, res, next) {
   res.send("user");
 });

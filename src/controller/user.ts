@@ -76,6 +76,23 @@ const userController = {
     }
   },
 
+  findByNickname: async (req, res) => {
+    try {
+      const { nickname } = req.query;
+      const users = await User.find({ nickname });
+      if (!users || users.length === 0) {
+        return res.json(getErrorJSON(1010));
+      }
+      return res.json({
+        code: 0,
+        msg: "查询用户成功",
+        data: users,
+      });
+    } catch {
+      res.json(getErrorJSON(1010));
+    }
+  },
+
   getMyInfo: asyncHandler(async (req, res) => {
     const userInfo = await User.findById(
       parseToken(req.headers.authorization),
@@ -91,7 +108,7 @@ const userController = {
   }),
 
   updateMyInfo: asyncHandler(async (req, res) => {
-    const { nickname, phone_number, sex } = req.body;
+    const { nickname, phone_number, sex, signature } = req.body;
     if (!Regex.phoneNumber.test(phone_number)) {
       return res.json(getErrorJSON(1041));
     }
@@ -103,6 +120,7 @@ const userController = {
       nickname,
       phone_number,
       sex,
+      signature,
     });
     if (data) {
       return res.json({

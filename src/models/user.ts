@@ -11,6 +11,7 @@ const UserSchema = new Schema(
     sex: { type: Number, default: 0 }, // 0 未定义 1 男 2 女
     age: { type: Number },
     birth: { type: Date },
+    signature: { type: String, default: "" }, //个性签名
     type: { type: Number, default: 1 }, // 账号类型 0 不可用 / 1 正常使用
   },
   { timestamps: true }
