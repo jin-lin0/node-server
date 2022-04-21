@@ -35,7 +35,13 @@ io.on("connection", (socket) => {
 
   socket.on("addFriend", async (val) => {
     friendController.add(val).then((res) => {
-      io.sockets.to(socket.id).emit("addSuccess", res);
+      io.sockets.to(socket.id).emit("addFriendSuccess", res);
+    });
+  });
+
+  socket.on("deleteFriend", async (val) => {
+    friendController.delete(val).then((res) => {
+      io.sockets.to(socket.id).emit("deleteFriendSuccess", res);
     });
   });
 

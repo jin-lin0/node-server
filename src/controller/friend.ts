@@ -15,6 +15,21 @@ const friendController = {
     }
     return false;
   },
+
+  delete: async (data) => {
+    const { userDelete, userReceive } = data;
+    if (userDelete === userReceive) {
+      return false;
+    }
+
+    const friend = await Friend.deleteMany({
+      userBuild: userDelete,
+      userReceive,
+    });
+    console.log(friend);
+    return true;
+  },
+
   getMy: async (req, res) => {
     try {
       const { id } = req.query;
