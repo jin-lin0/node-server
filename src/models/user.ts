@@ -12,6 +12,7 @@ const UserSchema = new Schema(
     age: { type: Number },
     birth: { type: Date },
     signature: { type: String, default: "" }, //个性签名
+    signatureColor: { type: String, default: "#ABB8C3" },
     type: { type: Number, default: 1 }, // 账号类型 0 不可用 / 1 正常使用
   },
   { timestamps: true }

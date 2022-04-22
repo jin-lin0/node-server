@@ -6,7 +6,7 @@ import { FILE_ACCESSKEY_ID, FILE_ACCESSKEY_SECRET } from "../../local_config";
 export const fileUpLoadToOSS = () => {
   const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, `${__dirname}/upload`);
+      cb(null, `./public/upload`);
     },
     filename: function (req, file, cb) {
       cb(null, `keyme-${Date.now()}-${file.originalname}`);

@@ -108,7 +108,7 @@ const userController = {
   }),
 
   updateMyInfo: asyncHandler(async (req, res) => {
-    const { nickname, phone_number, sex, signature } = req.body;
+    const { nickname, phone_number, sex, signature, signatureColor } = req.body;
     if (!Regex.phoneNumber.test(phone_number)) {
       return res.json(getErrorJSON(1041));
     }
@@ -121,6 +121,7 @@ const userController = {
       phone_number,
       sex,
       signature,
+      signatureColor,
     });
     if (data) {
       return res.json({

@@ -7,6 +7,7 @@ interface JwtPayload {
 }
 
 const authRoutes = {
+  noTokenPrefix: ["/upload"],
   noToken: ["/chatApi/user/login", "/chatApi/user/register"],
 };
 
@@ -16,8 +17,12 @@ export const generateToken = (_id: string) =>
 export const verifyToken = (req, res, next) => {
   try {
     const token = req.headers.authorization;
-
-    if (authRoutes.noToken.includes(req.originalUrl)) {
+    if (
+      authRoutes.noTokenPrefix.some((item) =>
+        new RegExp(`\^${item}`).test(req.originalUrl)
+      ) ||
+      authRoutes.noToken.includes(req.originalUrl)
+    ) {
       next();
     } else {
       if (token) {
