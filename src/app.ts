@@ -56,6 +56,45 @@ io.on("connection", (socket) => {
     });
   });
 
+  socket.on("rtcVideoSend", (data) => {
+    const { receiveId } = data;
+    const receiveSocketId = Object.keys(onLineUser).find(
+      (key) => onLineUser[key]._id === receiveId
+    );
+    if (receiveSocketId) {
+      socket.to(receiveSocketId).emit("rtcVideoReceive", data);
+    }
+  });
+  socket.on("rtcVideoReceiveSend", (data) => {
+    const { senderId } = data;
+    const senderSocketId = Object.keys(onLineUser).find(
+      (key) => onLineUser[key]._id === senderId
+    );
+    if (senderSocketId) {
+      io.sockets.to(senderSocketId).emit("rtcVideoSenderReceive", data);
+    }
+  });
+
+  socket.on("callUser", (data) => {
+    const { receiveId } = data;
+    const receiveSocketId = Object.keys(onLineUser).find(
+      (key) => onLineUser[key]._id === receiveId
+    );
+    if (receiveSocketId) {
+      io.to(receiveSocketId).emit("callUser", data);
+    }
+  });
+
+  socket.on("answerCall", (data) => {
+    const { to } = data;
+    const senderSocketId = Object.keys(onLineUser).find(
+      (key) => onLineUser[key]._id === to
+    );
+    if (senderSocketId) {
+      io.to(senderSocketId).emit("callAccepted", data.signal);
+    }
+  });
+
   socket.on("disconnect", (r) => {
     const id = socket.id;
     delete onLineUser[id];
