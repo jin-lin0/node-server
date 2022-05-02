@@ -14,6 +14,13 @@ const userController = {
       return res.json(getErrorJSON(1002));
     }
     if (await bcryptjs.compareSync(password, user.password)) {
+      if (
+        Object.values(onLineUser).some(
+          (item: any) => String(item._id) === String(user._id)
+        )
+      ) {
+        return res.json(getErrorJSON(1007));
+      }
       return res.json({
         code: 0,
         msg: "登录成功",

@@ -82,6 +82,8 @@ io.on("connection", (socket) => {
     );
     if (receiveSocketId) {
       io.to(receiveSocketId).emit("callUser", data);
+    } else {
+      io.to(socket.id).emit("callUserError", data);
     }
   });
 
