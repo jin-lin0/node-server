@@ -110,6 +110,7 @@ const userController = {
     }
     return res.json({
       code: 0,
+      token: generateToken(parseToken(req.headers.authorization)),
       data: userInfo,
     });
   }),

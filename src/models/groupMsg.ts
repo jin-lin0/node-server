@@ -3,7 +3,7 @@ import mongoose from "../db/index";
 const { Schema, model } = mongoose;
 
 const GroupMsgSchema = new Schema({
-  type: { type: String, default: "text" }, //text 文本 img 图片
+  type: { type: String, default: "text" },
   groupId: {
     type: Schema.Types.ObjectId,
     ref: "group",

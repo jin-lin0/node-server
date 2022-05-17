@@ -9,6 +9,7 @@ const GroupSchema = new Schema({
   avatarUrl: { type: String },
   owner: { type: Schema.Types.ObjectId, ref: "user", required: true }, //群主
   buildDate: { type: Date, default: Date.now() },
+  status: { type: Number, default: 1 },
 });
 
 const Group = model<any, any>("group", GroupSchema);

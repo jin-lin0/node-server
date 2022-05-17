@@ -3,6 +3,9 @@ import mongoose from "../db/index";
 const { Schema, model } = mongoose;
 
 const GroupUserSchema = new Schema({
+  groupNickname: {
+    type: String,
+  },
   groupId: {
     type: Schema.Types.ObjectId,
     ref: "group",
@@ -18,7 +21,10 @@ const GroupUserSchema = new Schema({
 });
 
 GroupUserSchema.statics.findGroupsByUserId = function (userId, cb) {
-  return this.find({ userId }).populate("groupId").exec(cb);
+  return this.find({ userId })
+    .populate("groupId")
+    .exec(cb)
+    .then((data) => Promise.resolve(data.map((item) => item.groupId)));
 };
 
 GroupUserSchema.statics.findUsersByGroupId = function (groupId, cb) {

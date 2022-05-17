@@ -9,6 +9,7 @@ import chatApi from "./routes/chatApi";
 import { verifyToken } from "./util/token";
 import friendController from "./controller/friend";
 import msgController from "./controller/msg";
+import GroupController from "./controller/group";
 
 const app = express();
 const server = createServer(app);
@@ -44,6 +45,11 @@ io.on("connection", (socket) => {
       io.sockets.to(socket.id).emit("deleteFriendSuccess", res);
     });
   });
+  socket.on("deleteGroup", async (val) => {
+    GroupController.delete(val).then((res) => {
+      io.sockets.to(socket.id).emit("deleteGroupSuccess", res);
+    });
+  });
 
   socket.on("sendMsg", (data) => {
     msgController.add(data).then((res) => {
@@ -54,6 +60,16 @@ io.on("connection", (socket) => {
         socket.to(receiveSocketId).emit("receiveMsg", data);
       }
     });
+  });
+
+  socket.on("addGroup", (data) => {
+    GroupController.addUser(data).then((res) => {
+      io.sockets.to(socket.id).emit("addGroupSuccess", res);
+    });
+  });
+
+  socket.on("sendGroupMsg", (data) => {
+    const { groupId } = data;
   });
 
   socket.on("rtcVideoSend", (data) => {

@@ -4,9 +4,11 @@ const router = Router();
 
 router.post("/addUser", groupController.addUser);
 
-router.post("/register", groupController.register);
+router.post("/create", groupController.create);
 
 router.get("/findById", groupController.findById);
+
+router.get("/findByNickname", groupController.findByNickname);
 
 router.get("/getMy", groupController.getMy);
 

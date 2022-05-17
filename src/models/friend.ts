@@ -18,7 +18,13 @@ const FriendSchema = new Schema({
 });
 
 FriendSchema.statics.findBuildFriends = function (id, cb) {
-  return this.find({ userBuild: id }).populate("userReceive").exec(cb);
+  return this.find({ userBuild: id })
+    .populate({
+      path: "userReceive",
+      select:
+        "avatarUrl createdAt nickname phone_number sex,signature signatureColor type",
+    })
+    .exec(cb);
 };
 
 const Friend = model<any, any>("friend", FriendSchema);

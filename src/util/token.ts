@@ -12,7 +12,7 @@ const authRoutes = {
 };
 
 export const generateToken = (_id: string) =>
-  jwt.sign({ _id }, TOKEN_SECRET_KEY, { expiresIn: "6h" });
+  jwt.sign({ _id }, TOKEN_SECRET_KEY, { expiresIn: "2h" });
 
 export const verifyToken = (req, res, next) => {
   try {
