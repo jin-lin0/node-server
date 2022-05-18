@@ -77,12 +77,13 @@ io.on("connection", (socket) => {
   socket.on("sendGroupMsg", (data) => {
     const { groupId } = data;
     GroupController.addMsg(data).then((res) => {
-      io.in(groupId).emit("receiveGroupMsg", data);
+      socket.broadcast.to(groupId).emit("receiveGroupMsg", data);
     });
   });
 
   socket.on("addGroup", (data) => {
     GroupController.addUser(data).then((res) => {
+      socket.join(data.group);
       io.sockets.to(socket.id).emit("addGroupSuccess", res);
     });
   });

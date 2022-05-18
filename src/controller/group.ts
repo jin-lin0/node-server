@@ -111,6 +111,7 @@ const GroupController = {
     if (String(group.owner) === userId) {
       await Group.deleteMany({ _id: groupId });
       await GroupUser.deleteMany({ groupId });
+      await GroupMsg.deleMany({ groupId });
       return true;
     }
 

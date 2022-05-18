@@ -22,7 +22,7 @@ FriendSchema.statics.findBuildFriends = function (id, cb) {
     .populate({
       path: "userReceive",
       select:
-        "avatarUrl createdAt nickname phone_number sex,signature signatureColor type",
+        "avatarUrl createdAt nickname phone_number sex signature signatureColor type",
     })
     .exec(cb);
 };
