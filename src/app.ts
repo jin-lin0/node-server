@@ -10,11 +10,13 @@ import { verifyToken } from "./util/token";
 import friendController from "./controller/friend";
 import msgController from "./controller/msg";
 import GroupController from "./controller/group";
+import GroupUser from "./models/groupUser";
 
 const app = express();
 const server = createServer(app);
 const io = new Server(server);
 export const onLineUser = {};
+export const onLineGroupUser = {};
 
 const PORT = process.env.port || 5555;
 
@@ -30,6 +32,16 @@ io.on("connection", (socket) => {
   socket.on("online", (val) => {
     if (val) {
       onLineUser[socket.id] = val;
+
+      GroupUser.find({ userId: val._id }, { groupId: 1, _id: 0 }).then(
+        (data) => {
+          if (Array.isArray(data)) {
+            data.forEach((item) => {
+              socket.join(String(item.groupId));
+            });
+          }
+        }
+      );
     }
     io.emit("onLineUser", onLineUser);
   });
@@ -62,14 +74,17 @@ io.on("connection", (socket) => {
     });
   });
 
+  socket.on("sendGroupMsg", (data) => {
+    const { groupId } = data;
+    GroupController.addMsg(data).then((res) => {
+      io.in(groupId).emit("receiveGroupMsg", data);
+    });
+  });
+
   socket.on("addGroup", (data) => {
     GroupController.addUser(data).then((res) => {
       io.sockets.to(socket.id).emit("addGroupSuccess", res);
     });
-  });
-
-  socket.on("sendGroupMsg", (data) => {
-    const { groupId } = data;
   });
 
   socket.on("rtcVideoSend", (data) => {

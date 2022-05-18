@@ -100,7 +100,10 @@ const GroupController = {
     }
     return false;
   },
-  addMsg: () => {},
+  addMsg: async (msg) => {
+    const data = await GroupMsg.insertMany(msg);
+    return data[0];
+  },
   delete: async (data) => {
     const { userId, groupId } = data;
 
@@ -116,6 +119,21 @@ const GroupController = {
       groupId,
     });
     return true;
+  },
+  getMsg: async (req, res) => {
+    try {
+      const { userId, groupId, number } = req.query;
+      const data = await GroupMsg.find({ groupId })
+        .sort({ _id: -1 })
+        .limit(number);
+      return res.json({
+        code: 0,
+        msg: "查询群聊信息成功！",
+        data: data.reverse(),
+      });
+    } catch (e) {
+      res.json(getErrorJSON(1056));
+    }
   },
 };
 

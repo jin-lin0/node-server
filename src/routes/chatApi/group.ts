@@ -14,6 +14,8 @@ router.get("/getMy", groupController.getMy);
 
 router.get("/getInfo", groupController.getInfo);
 
+router.get("/getMsg", groupController.getMsg);
+
 router.get("/", function (req, res, next) {
   res.send("group");
 });

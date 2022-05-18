@@ -12,6 +12,12 @@ const GroupMsgSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "user",
   },
+  senderAvatar: {
+    type: String,
+  },
+  senderNickname: {
+    type: String,
+  },
   content: { type: String },
   createTime: { type: Date, default: Date.now() },
   expand: { type: String },
