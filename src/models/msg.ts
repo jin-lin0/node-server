@@ -3,7 +3,10 @@ import mongoose from "../db/index";
 const { Schema, model } = mongoose;
 
 const MsgSchema = new Schema({
-  type: { type: String, default: "text" }, //text 文本 img 图片
+  type: {
+    type: String,
+    default: "text",
+  }, //text 文本 img 图片
   sender: {
     type: Schema.Types.ObjectId,
     ref: "user",
@@ -13,7 +16,10 @@ const MsgSchema = new Schema({
     ref: "user",
   },
   content: { type: String },
-  createTime: { type: Date, default: Date.now() },
+  createTime: {
+    type: Date,
+    default: Date.now(),
+  },
   expand: { type: String },
   status: { type: Number, default: 1 }, //0 过期 1 正常
 });
